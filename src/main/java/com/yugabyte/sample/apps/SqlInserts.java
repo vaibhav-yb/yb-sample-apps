@@ -87,7 +87,7 @@ public class SqlInserts extends AppBase {
           LOG.info("Dropping any table(s) left from previous runs if any");
       }
       connection.createStatement().execute(
-          String.format("CREATE TABLE IF NOT EXISTS %s (k text PRIMARY KEY, v text) SPLIT INTO 6 TABLETS", getTableName()));
+          String.format("CREATE TABLE IF NOT EXISTS %s (k text PRIMARY KEY, v text) SPLIT INTO 1 TABLETS", getTableName()));
       LOG.info(String.format("Created table: %s", getTableName()));
       if (tableOp.equals(TableOp.TruncateTable)) {
       	connection.createStatement().execute(
