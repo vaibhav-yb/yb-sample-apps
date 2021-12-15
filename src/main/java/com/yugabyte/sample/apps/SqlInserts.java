@@ -156,7 +156,7 @@ public class SqlInserts extends AppBase {
       close(insConnection);
       insConnection = getPostgresConnection();
       preparedInsert = insConnection.prepareStatement(
-          String.format("INSERT INTO %s (k, v) VALUES (?, ?);", getTableName()));
+          String.format("BEGIN TRANSACTION; INSERT INTO %s (k, v) VALUES (?, ?); COMMIT;", getTableName()));
     }
     return preparedInsert;
   }
@@ -175,9 +175,7 @@ public class SqlInserts extends AppBase {
       // Prefix hashcode to ensure generated keys are random and not sequential.
       statement.setString(1, key.asString());
       statement.setString(2, key.getValueStr());
-      st.execute("begin;");
       result = statement.executeUpdate();
-      st.execute("commit;");
       LOG.debug("Wrote key: " + key.asString() + ", " + key.getValueStr() + ", return code: " +
           result);
       getSimpleLoadGenerator().recordWriteSuccess(key);
