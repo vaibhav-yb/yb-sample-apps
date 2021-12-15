@@ -15,6 +15,7 @@ package com.yugabyte.sample.apps;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 
@@ -169,11 +170,14 @@ public class SqlInserts extends AppBase {
 
     int result = 0;
     try {
+      Statement st = getPostgresConnection().createStatement();
       PreparedStatement statement = getPreparedInsert();
       // Prefix hashcode to ensure generated keys are random and not sequential.
       statement.setString(1, key.asString());
       statement.setString(2, key.getValueStr());
+      st.execute("begin;");
       result = statement.executeUpdate();
+      st.execute("commit;");
       LOG.debug("Wrote key: " + key.asString() + ", " + key.getValueStr() + ", return code: " +
           result);
       getSimpleLoadGenerator().recordWriteSuccess(key);
