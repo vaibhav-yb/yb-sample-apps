@@ -660,6 +660,9 @@ public class CmdLineOpts {
       }
       AppBase.appConfig.tableOp = TableOp.NoOp;
     }
+    if (cmd.hasOption("set_table_name")) {
+      AppBase.appConfig.tableName = cmd.getOptionValue("set_table_name");
+    }
     if (cmd.hasOption("create_table_name")) {
       AppBase.appConfig.tableName = cmd.getOptionValue("create_table_name");
       LOG.info("Create table name: " + AppBase.appConfig.tableName);
@@ -726,6 +729,7 @@ public class CmdLineOpts {
     options.addOption("nouuid", false,
                       "Do not use a UUID. Keys will be key:1, key:2, key:3, "
                           + "instead of <uuid>:1, <uuid>:2, <uuid>:3 etc.");
+    options.addOption("set_table_name", true, "The name of the table to perform operations on.");
     options.addOption("create_table_name", true, "The name of the CQL table to create.");
     options.addOption("default_postgres_database", true, "The name of the default postgres db.");
     options.addOption("drop_table_name", true, "The name of the CQL table to drop.");
